@@ -19,17 +19,17 @@ public class TodoController {
     }
 
     @GetMapping("/todos")
-    public List<Todo> getAllTodos() {
+    public List<TodoResponseDTO> getAllTodos() {
         return todoService.getAllTodos();
     }
 
     @PostMapping("/todos")
-    public Todo createTodo(@RequestBody Todo todo) {
-        return todoService.createTodo(todo);
+    public TodoResponseDTO createTodo(@RequestBody TodoRequestDTO todoRequestDTO) {
+        return todoService.createTodo(todoRequestDTO);
     }
 
     @GetMapping("/todos/{id}")
-    public Todo getTodoById(@PathVariable Long id) {
+    public TodoResponseDTO getTodoById(@PathVariable Long id) {
         return todoService.getTodoById(id);
     }
 
@@ -39,8 +39,8 @@ public class TodoController {
     }
 
     @PutMapping("/todos/{id}")
-    public Todo updateTodo(@PathVariable Long id, @RequestBody Todo todo) {
-        return todoService.updateTodo(id, todo);
+    public TodoResponseDTO updateTodo(@PathVariable Long id, @RequestBody TodoRequestDTO todoRequestDTO) {
+        return todoService.updateTodo(id, todoRequestDTO);
     }
 
 }

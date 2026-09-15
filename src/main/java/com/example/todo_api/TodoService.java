@@ -2,6 +2,7 @@ package com.example.todo_api;
 
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Optional;
 
 @Service
@@ -13,17 +14,63 @@ public class TodoService {
         this.todoRepository = todoRepository;
     }
 
-    public List<Todo> getAllTodos() {
-        return todoRepository.findAll();
+    public List<TodoResponseDTO> getAllTodos() {
+
+        List<Todo> todos = todoRepository.findAll();
+
+        List<TodoResponseDTO> responseDTOs = new ArrayList<>();
+
+        for (Todo todo : todos) {
+
+            TodoResponseDTO responseDTO = new TodoResponseDTO();
+
+            responseDTO.setId(todo.getId());
+            responseDTO.setTitle(todo.getTitle());
+            responseDTO.setDescription(todo.getDescription());
+            responseDTO.setCompleted(todo.isCompleted());
+            responseDTO.setDueDate(todo.getDueDate());
+
+            responseDTOs.add(responseDTO);
+        }
+
+        return responseDTOs;
     }
 
-    public Todo createTodo(Todo todo){
-        return todoRepository.save(todo);
+    public TodoResponseDTO createTodo(TodoRequestDTO todoRequestDTO){
+
+        Todo todo = new Todo();
+
+        todo.setTitle(todoRequestDTO.getTitle());
+        todo.setDescription(todoRequestDTO.getDescription());
+        todo.setCompleted(todoRequestDTO.isCompleted());
+        todo.setDueDate(todoRequestDTO.getDueDate());
+
+        Todo savedTodo = todoRepository.save(todo);
+
+        TodoResponseDTO responseDTO = new TodoResponseDTO();
+
+        responseDTO.setId(savedTodo.getId());
+        responseDTO.setTitle(savedTodo.getTitle());
+        responseDTO.setDescription(savedTodo.getDescription());
+        responseDTO.setCompleted(savedTodo.isCompleted());
+        responseDTO.setDueDate(savedTodo.getDueDate());
+
+        return responseDTO;
     }
 
-    public Todo getTodoById(Long id) {
-        return todoRepository.findById(id)
+    public TodoResponseDTO getTodoById(Long id) {
+        Todo todo = todoRepository.findById(id)
                 .orElseThrow(() -> new TodoNotFoundException(id));
+
+        TodoResponseDTO responseDTO = new TodoResponseDTO();
+
+        responseDTO.setId(todo.getId());
+        responseDTO.setTitle(todo.getTitle());
+        responseDTO.setDescription(todo.getDescription());
+        responseDTO.setCompleted(todo.isCompleted());
+        responseDTO.setDueDate(todo.getDueDate());
+
+        return responseDTO;
     }
 
     public void deleteTodo(Long id) {
@@ -33,15 +80,25 @@ public class TodoService {
         todoRepository.delete(todo);
     }
 
-    public Todo updateTodo(Long id, Todo updatedTodo) {
+    public TodoResponseDTO updateTodo(Long id, TodoRequestDTO todoRequestDTO) {
         Todo existingTodo = todoRepository.findById(id)
                 .orElseThrow(() -> new TodoNotFoundException(id));
 
-        existingTodo.setTitle(updatedTodo.getTitle());
-        existingTodo.setDescription(updatedTodo.getDescription());
-        existingTodo.setCompleted(updatedTodo.isCompleted());
-        existingTodo.setDueDate(updatedTodo.getDueDate());
+        existingTodo.setTitle(todoRequestDTO.getTitle());
+        existingTodo.setDescription(todoRequestDTO.getDescription());
+        existingTodo.setCompleted(todoRequestDTO.isCompleted());
+        existingTodo.setDueDate(todoRequestDTO.getDueDate());
 
-        return todoRepository.save(existingTodo);
+        Todo savedTodo = todoRepository.save(existingTodo);
+
+        TodoResponseDTO responseDTO = new TodoResponseDTO();
+
+        responseDTO.setId(savedTodo.getId());
+        responseDTO.setTitle(savedTodo.getTitle());
+        responseDTO.setDescription(savedTodo.getDescription());
+        responseDTO.setCompleted(savedTodo.isCompleted());
+        responseDTO.setDueDate(savedTodo.getDueDate());
+
+        return responseDTO;
     }
 }
