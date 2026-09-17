@@ -1,5 +1,6 @@
 package com.example.todo_api;
 
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.GetMapping;
 import java.util.List;
@@ -24,7 +25,7 @@ public class TodoController {
     }
 
     @PostMapping("/todos")
-    public TodoResponseDTO createTodo(@RequestBody TodoRequestDTO todoRequestDTO) {
+    public TodoResponseDTO createTodo(@Valid @RequestBody TodoRequestDTO todoRequestDTO) {
         return todoService.createTodo(todoRequestDTO);
     }
 
@@ -39,7 +40,7 @@ public class TodoController {
     }
 
     @PutMapping("/todos/{id}")
-    public TodoResponseDTO updateTodo(@PathVariable Long id, @RequestBody TodoRequestDTO todoRequestDTO) {
+    public TodoResponseDTO updateTodo(@PathVariable Long id, @Valid @RequestBody TodoRequestDTO todoRequestDTO) {
         return todoService.updateTodo(id, todoRequestDTO);
     }
 

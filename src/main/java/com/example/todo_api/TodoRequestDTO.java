@@ -1,11 +1,21 @@
 package com.example.todo_api;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
 import java.time.LocalDate;
 
 public class TodoRequestDTO {
+
+    @NotBlank
+    @Size(max = 100)
     private String title;
+
+    @Size(max = 500)
     private String description;
+
     private boolean completed;
+
     private LocalDate dueDate;
 
     public String getTitle() {
