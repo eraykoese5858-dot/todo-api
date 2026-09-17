@@ -9,9 +9,11 @@ import java.util.Optional;
 public class TodoService {
 
     private final TodoRepository todoRepository;
+    private final TodoMapper todoMapper;
 
-    public TodoService(TodoRepository todoRepository) {
+    public TodoService(TodoRepository todoRepository, TodoMapper todoMapper) {
         this.todoRepository = todoRepository;
+        this.todoMapper = todoMapper;
     }
 
     public List<TodoResponseDTO> getAllTodos() {
@@ -21,15 +23,7 @@ public class TodoService {
         List<TodoResponseDTO> responseDTOs = new ArrayList<>();
 
         for (Todo todo : todos) {
-
-            TodoResponseDTO responseDTO = new TodoResponseDTO();
-
-            responseDTO.setId(todo.getId());
-            responseDTO.setTitle(todo.getTitle());
-            responseDTO.setDescription(todo.getDescription());
-            responseDTO.setCompleted(todo.isCompleted());
-            responseDTO.setDueDate(todo.getDueDate());
-
+            TodoResponseDTO responseDTO = todoMapper.toResponseDTO(todo);
             responseDTOs.add(responseDTO);
         }
 
@@ -38,22 +32,11 @@ public class TodoService {
 
     public TodoResponseDTO createTodo(TodoRequestDTO todoRequestDTO){
 
-        Todo todo = new Todo();
-
-        todo.setTitle(todoRequestDTO.getTitle());
-        todo.setDescription(todoRequestDTO.getDescription());
-        todo.setCompleted(todoRequestDTO.isCompleted());
-        todo.setDueDate(todoRequestDTO.getDueDate());
+        Todo todo = todoMapper.toEntity(todoRequestDTO);
 
         Todo savedTodo = todoRepository.save(todo);
 
-        TodoResponseDTO responseDTO = new TodoResponseDTO();
-
-        responseDTO.setId(savedTodo.getId());
-        responseDTO.setTitle(savedTodo.getTitle());
-        responseDTO.setDescription(savedTodo.getDescription());
-        responseDTO.setCompleted(savedTodo.isCompleted());
-        responseDTO.setDueDate(savedTodo.getDueDate());
+        TodoResponseDTO responseDTO = todoMapper.toResponseDTO(savedTodo);
 
         return responseDTO;
     }
@@ -62,13 +45,7 @@ public class TodoService {
         Todo todo = todoRepository.findById(id)
                 .orElseThrow(() -> new TodoNotFoundException(id));
 
-        TodoResponseDTO responseDTO = new TodoResponseDTO();
-
-        responseDTO.setId(todo.getId());
-        responseDTO.setTitle(todo.getTitle());
-        responseDTO.setDescription(todo.getDescription());
-        responseDTO.setCompleted(todo.isCompleted());
-        responseDTO.setDueDate(todo.getDueDate());
+        TodoResponseDTO responseDTO = todoMapper.toResponseDTO(todo);
 
         return responseDTO;
     }
@@ -91,13 +68,7 @@ public class TodoService {
 
         Todo savedTodo = todoRepository.save(existingTodo);
 
-        TodoResponseDTO responseDTO = new TodoResponseDTO();
-
-        responseDTO.setId(savedTodo.getId());
-        responseDTO.setTitle(savedTodo.getTitle());
-        responseDTO.setDescription(savedTodo.getDescription());
-        responseDTO.setCompleted(savedTodo.isCompleted());
-        responseDTO.setDueDate(savedTodo.getDueDate());
+        TodoResponseDTO responseDTO = todoMapper.toResponseDTO(savedTodo);
 
         return responseDTO;
     }
