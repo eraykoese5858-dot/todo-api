@@ -61,10 +61,7 @@ public class TodoService {
         Todo existingTodo = todoRepository.findById(id)
                 .orElseThrow(() -> new TodoNotFoundException(id));
 
-        existingTodo.setTitle(todoRequestDTO.getTitle());
-        existingTodo.setDescription(todoRequestDTO.getDescription());
-        existingTodo.setCompleted(todoRequestDTO.isCompleted());
-        existingTodo.setDueDate(todoRequestDTO.getDueDate());
+        todoMapper.updateEntityFromDTO(todoRequestDTO, existingTodo);
 
         Todo savedTodo = todoRepository.save(existingTodo);
 

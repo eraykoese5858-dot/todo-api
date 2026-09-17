@@ -28,4 +28,12 @@ public class TodoMapper {
 
         return responseDTO;
     }
+
+    public void updateEntityFromDTO(TodoRequestDTO dto, Todo todo) {
+
+        todo.setTitle(dto.getTitle());
+        todo.setDescription(dto.getDescription());
+        todo.setCompleted(dto.isCompleted());
+        todo.setDueDate(dto.getDueDate());
+    }
 }
